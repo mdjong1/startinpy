@@ -61,6 +61,14 @@ impl DT {
         self.t.insert(&pts);
     }
 
+    fn insert_vertex(&mut self, px: f64, py: f64, pz: f64) {
+        self.t.insert_vertex(px, py, pz);
+    }
+
+    fn define_star(&mut self, center_vertex_id: usize, neighbors: Vec<usize>) {
+        self.t.define_star(center_vertex_id, neighbors);
+    }
+
     fn read_las(&mut self, path: String) -> PyResult<()> {
         let re = las::Reader::from_path(path);
         if re.is_err() {
