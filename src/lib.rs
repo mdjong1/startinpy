@@ -61,12 +61,16 @@ impl DT {
         self.t.insert(&pts);
     }
 
-    fn insert_vertex(&mut self, px: f64, py: f64, pz: f64) {
-        self.t.insert_vertex(px, py, pz);
+    fn insert_vertex(&mut self, vertex_id: usize, px: f64, py: f64, pz: f64) {
+        self.t.insert_vertex(vertex_id, px, py, pz);
     }
 
     fn define_star(&mut self, center_vertex_id: usize, neighbors: Vec<usize>) {
-        self.t.define_star(center_vertex_id, neighbors);
+        self.t.define_star(&center_vertex_id, neighbors);
+    }
+
+    fn set_is_init(&mut self, is_init: bool) {
+        self.t.set_is_init(is_init);
     }
 
     fn read_las(&mut self, path: String) -> PyResult<()> {
@@ -101,6 +105,10 @@ impl DT {
 
     fn all_vertices(&self) -> PyResult<Vec<Vec<f64>>> {
         Ok(self.t.all_vertices())
+    }
+
+    fn is_vertex_removed(&self, v: usize) -> PyResult<bool> {
+        Ok(self.t.is_vertex_removed(v))
     }
 
     fn get_point(&self, v: usize) -> PyResult<Vec<f64>> {
