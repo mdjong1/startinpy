@@ -12,18 +12,18 @@ with open("Cargo.toml") as fp:
 
 
 setup(
-    name="startin",
+    name="startinpy",
     version=version,
     description=description,
     long_description=long_description,
     long_description_content_type="text/x-md",
-    url='https://github.com/hugoledoux/startin_python',
+    url='https://github.com/hugoledoux/startinpy',
     author='Hugo Ledoux',
     author_email='h.ledoux@tudelft.nl',
     classifiers=[
         "License :: OSI Approved :: MIT License",
     ],
-    packages=["startin"],
+    packages=["startinpy"],
     python_requires='>=3.6',
 )
 

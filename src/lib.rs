@@ -12,7 +12,7 @@ use las::Read;
 /// This is the Python bindings of Rust's startin:
 /// (https://github.com/hugoledoux/startin)
 #[pymodule]
-fn startin(_py: Python, m: &PyModule) -> PyResult<()> {
+fn startinpy(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_class::<DT>()?;
     Ok(())
 }
@@ -137,6 +137,15 @@ impl DT {
         Ok(self.t.convex_hull())
     }
 
+    fn is_inside_convex_hull(&self, px: f64, py: f64) -> PyResult<bool> {
+        let re = self.t.locate(px, py);
+        if re.is_none() == true {
+            return Ok(false);
+        } else {
+            Ok(true)
+        }
+    }
+
     fn is_vertex_convex_hull(&self, v: usize) -> PyResult<bool> {
         Ok(self.t.is_vertex_convex_hull(v))
     }
@@ -222,8 +231,24 @@ impl DT {
         Ok(re.unwrap())
     }
 
+    fn interpolate_nni(&mut self, px: f64, py: f64) -> PyResult<f64> {
+        let re = self.t.interpolate_nni(px, py);
+        if re.is_none() {
+            return Err(PyErr::new::<exceptions::IOError, _>("Outside CH"));
+        }
+        Ok(re.unwrap())
+    }
+
     fn write_obj(&self, path: String) -> PyResult<()> {
         let re = self.t.write_obj(path.to_string(), false);
+        if re.is_err() {
+            return Err(PyErr::new::<exceptions::IOError, _>("Invalid path"));
+        }
+        Ok(())
+    }
+
+    fn write_geojson(&self, path: String) -> PyResult<()> {
+        let re = self.t.write_geojson(path.to_string());
         if re.is_err() {
             return Err(PyErr::new::<exceptions::IOError, _>("Invalid path"));
         }
